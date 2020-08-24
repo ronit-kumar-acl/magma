@@ -840,61 +840,64 @@ jobs:
 workflows:
   version: 2.1
 
-  cloud:
+  # cloud:
+  #   jobs:
+  #     - cloud-test
+  #     - insync-checkin
+  #     - orc8r-build:
+  #         requires:
+  #           - cloud-test
+  #           - insync-checkin
+  #
+  # lib_gateway:
+  #   jobs:
+  #     - orc8r-gateway-test
+  #
+  # agw:
+  #   jobs:
+  #     - lte-test
+  #     - lte-integ-test:
+  #         <<: *only_master
+  #     - lte-agw-deploy:
+  #         <<: *only_master
+  #         requires:
+  #           - lte-integ-test
+  #
+  # feg:
+  #   jobs:
+  #     - feg-precommit
+  #     - feg-build:
+  #         requires:
+  #           - feg-precommit
+  #
+  # cwag:
+  #   jobs:
+  #     - cwag-precommit
+  #     - cwf-integ-test:
+  #         <<: *only_master
+  #     - xwfm-test:
+  #         <<: *only_master
+  #     - cwag-deploy:
+  #         <<: *only_master
+  #         requires:
+  #           - cwag-precommit
+  #           - cwf-integ-test
+  #     - xwfm-deploy:
+  #         <<: *only_master
+  #         requires:
+  #           - xwfm-test
+  #           - cwag-deploy
+  #
+  #
+  # cwf_operator:
+  #   jobs:
+  #     - cwf-operator-precommit
+  #     - cwf-operator-build:
+  #         requires:
+  #           - cwf-operator-precommit
+  xwfm:
     jobs:
-      - cloud-test
-      - insync-checkin
-      - orc8r-build:
-          requires:
-            - cloud-test
-            - insync-checkin
-
-  lib_gateway:
-    jobs:
-      - orc8r-gateway-test
-
-  agw:
-    jobs:
-      - lte-test
-      - lte-integ-test:
-          <<: *only_master
-      - lte-agw-deploy:
-          <<: *only_master
-          requires:
-            - lte-integ-test
-
-  feg:
-    jobs:
-      - feg-precommit
-      - feg-build:
-          requires:
-            - feg-precommit
-
-  cwag:
-    jobs:
-      - cwag-precommit
-      - cwf-integ-test:
-          <<: *only_master
-      - xwfm-test:
-          <<: *only_master
-      - cwag-deploy:
-          <<: *only_master
-          requires:
-            - cwag-precommit
-            - cwf-integ-test
-      - xwfm-deploy:
-          <<: *only_master
-          requires:
-            - xwfm-test
-            - cwag-deploy
-
-
-  cwf_operator:
-    jobs:
-      - cwf-operator-precommit
-      - cwf-operator-build:
-          requires:
-            - cwf-operator-precommit
+      - xwfm-test
 
   hourly_xwfm:
     triggers:

@@ -12,7 +12,7 @@
 # limitations under the License
 
 - name: disable the firewall
-  systemd: 
+  systemd:
      name: firewalld
      state: stopped
      enabled: false
@@ -27,7 +27,8 @@
 
 - name: set the hostname now
   become: true
-  shell: hostname {{ 'xwfm.' + partner + '.' + env + '.' + server_id | default('1') }} 
+  shell: hostname {{ 'xwfm.' + partner + '.' + env + '.' + server_id | default('1') }}
+  ignore_errors: true
 
 - name: delete ovs bridges incase they exist
   become: true
@@ -65,10 +66,10 @@
       template: src={{ item }} dest=/etc/sysconfig/network-scripts/
       with_items:
         - ifcfg-uplink_br0
-   
+
     - name: bring up uplink bridge
       become: true
-      shell: ifup uplink_br0 
+      shell: ifup uplink_br0
 
     - name: Install gw0  file
       become: true
@@ -83,16 +84,16 @@
     - name: Install network config  file for passthrough
       become: true
       template: src=ifcfg-gw0 dest=/etc/sysconfig/network-scripts/ifcfg-{{ uplink_if }}
-      when: uplink_if is defined 
+      when: uplink_if is defined
 
     - name: bring up uplink interface
       become: true
       shell: ifup {{ item }}
       with_items:
         - "{{ uplink_if }}"
-      when: uplink_if is defined 
+      when: uplink_if is defined
 
-    - name: bring up uplink patch 
+    - name: bring up uplink patch
       become: true
       shell: ifup uplink_patch
       when: downlink_if is not defined
@@ -107,7 +108,7 @@
       shell: ifup {{ item }}
       with_items:
         - "{{ downlink_if }}"
-      when: downlink_if is defined 
+      when: downlink_if is defined
 
 - name: Enable IP forwarding
   become: true
@@ -116,4 +117,3 @@
 - name: Set OVS controller for XWF bridge
   become: true
   shell: ovs-vsctl set-controller uplink_br0 tcp:{{ xwf_ctrl_ip }}:6653
-
